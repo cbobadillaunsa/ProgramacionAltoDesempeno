@@ -1,0 +1,55 @@
+/*
+Ejecutar ambos algoritmos paso a paso, y analisar el movimiento de datos entre la memoria principal y la memoria cache. 
+Hacer una evaluación de acuerdo a la complejidad algoritmica.
+
+En la multiplicación de matrices, el rendimiento a menudo está influenciado por cómo los datos se mueven entre la memoria principal y la memoria caché. 
+Las operaciones de memoria son más costosas en términos de tiempo que las operaciones aritméticas. La memoria caché tiene tamaños limitados y los datos se transfieren en bloques.
+
+En la versión clásica de tres bucles anidados, el acceso a los elementos de la matriz se hace en el orden en que están almacenados en la memoria. 
+Esto puede ser menos eficiente en términos de movimiento de datos, ya que podría causar muchos fallos de caché. 
+https://github.com/cbobadillaunsa/ProgramacionAltoDesempeno/blob/main/clase3_2
+
+En la versión por bloques, como los datos se acceden en bloques más pequeños, 
+es más probable que los datos necesarios estén ya en la memoria caché, 
+lo que reduce la cantidad de fallos de caché y mejora el rendimiento.
+https://github.com/cbobadillaunsa/ProgramacionAltoDesempeno/blob/main/clase3_3
+
+Tanto la versión clásica de tres bucles anidados como la versión por bloques tienen una complejidad algorítmica de O(n^3), 
+donde n es el tamaño de la matriz.
+
+Pero la versión por bloques generalmente es más eficiente en la práctica debido a la optimización de caché, 
+lo que la hace más rápida para tamaños de matrices más grandes. Aunque ambas versiones tienen la misma complejidad algorítmica, 
+la versión por bloques tiende a ser más rápida debido a una mejor utilización de la memoria caché.
+
+En el 3_2 tenemos la versión clásica de tres bucles anidados
+Tamaño de matriz: 100x100 - Tiempo de ejecución: 0.0116527 segundos
+Tamaño de matriz: 200x200 - Tiempo de ejecución: 0.093183 segundos
+Tamaño de matriz: 300x300 - Tiempo de ejecución: 0.304741 segundos
+Tamaño de matriz: 400x400 - Tiempo de ejecución: 0.891982 segundos
+Tamaño de matriz: 500x500 - Tiempo de ejecución: 1.63401 segundos
+Tamaño de matriz: 600x600 - Tiempo de ejecución: 3.18039 segundos
+Tamaño de matriz: 700x700 - Tiempo de ejecución: 6.971 segundos
+Tamaño de matriz: 800x800 - Tiempo de ejecución: 11.169 segundos
+Tamaño de matriz: 900x900 - Tiempo de ejecución: 15.8121 segundos
+Tamaño de matriz: 1000x1000 - Tiempo de ejecución: 28.8976 segundos
+Se puede ejecutar directamente en 
+https://onlinegdb.com/lR4jFNilW
+En el 3_3 tenemos la versión clásica de tres bucles anidados
+Tamaño de matriz: 100x100 - Tiempo de ejecución (por bloques): 0.0239574 segundos
+Tamaño de matriz: 200x200 - Tiempo de ejecución (por bloques): 0.150696 segundos
+Tamaño de matriz: 300x300 - Tiempo de ejecución (por bloques): 0.394162 segundos
+Tamaño de matriz: 400x400 - Tiempo de ejecución (por bloques): 0.864665 segundos
+Tamaño de matriz: 500x500 - Tiempo de ejecución (por bloques): 1.60871 segundos
+Tamaño de matriz: 600x600 - Tiempo de ejecución (por bloques): 2.80674 segundos
+Tamaño de matriz: 700x700 - Tiempo de ejecución (por bloques): 4.44678 segundos
+Tamaño de matriz: 800x800 - Tiempo de ejecución (por bloques): 6.60067 segundos
+Tamaño de matriz: 900x900 - Tiempo de ejecución (por bloques): 9.52788 segundos
+Tamaño de matriz: 1000x1000 - Tiempo de ejecución (por bloques): 12.9872 segundos
+Versión online de ejecución
+https://onlinegdb.com/VH6s18O8E 
+
+Se podría concluir que 
+Versión Clásica: Mayor movimiento de datos en patrones menos eficientes. Más fallos de caché en tamaños de matrices más grandes. Puede ser menos eficiente en la práctica.
+Versión por Bloques: Menor movimiento de datos, mejor utilización de la memoria caché. Menos fallos de caché en tamaños de matrices más grandes. Más eficiente en la práctica.
+
+*/
