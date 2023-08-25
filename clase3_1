@@ -41,7 +41,10 @@ int main() {
 
     return 0;
 }
-
+/*
 //Como se ve, tenemos un bucle mas rapido que otro
 //Tiempo del primer par de bucles: 0.00296451 segundos
 //Tiempo del segundo par de bucles: 0.00365888 segundos
+En este ejemplo, los dos pares de bucles realizan la misma operación de multiplicación de matriz-vector. Luego, se miden los tiempos de ejecución utilizando la biblioteca <chrono> para calcular cuánto tiempo lleva cada bucle.
+Es importante tener en cuenta que los resultados pueden variar según la configuración del sistema y el compilador utilizado. El propósito de esta comparación es observar cómo los cambios en el orden de los bucles anidados pueden afectar el rendimiento en términos de acceso a la memoria caché.
+*/
