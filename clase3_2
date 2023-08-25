@@ -1,0 +1,81 @@
+/*
+Implementar en C/C++ la multiplicación de matrices clásica, la versión de tres bucles anidados y evaluar su desempeño considerando diferentes tamaños de matriz.
+*/
+#include <iostream>
+#include <chrono>
+#include <vector>
+#include <random>
+
+const int MAX_SIZE = 1000;  // Tamaño máximo de la matriz
+
+// Función para multiplicar matrices utilizando tres bucles anidados
+void matrixMultiplication(const std::vector<std::vector<double>>& A,
+                          const std::vector<std::vector<double>>& B,
+                          std::vector<std::vector<double>>& C,
+                          int size) {
+    for (int i = 0; i < size; i++) {
+        for (int j = 0; j < size; j++) {
+            for (int k = 0; k < size; k++) {
+                C[i][j] += A[i][k] * B[k][j];
+            }
+        }
+    }
+}
+
+int main() {
+    std::random_device rd;
+    std::mt19937 gen(rd());
+    std::uniform_real_distribution<double> dis(1.0, 10.0);
+
+    for (int size = 100; size <= MAX_SIZE; size += 100) {
+        // Crear matrices A, B y C de tamaño size x size
+        std::vector<std::vector<double>> A(size, std::vector<double>(size));
+        std::vector<std::vector<double>> B(size, std::vector<double>(size));
+        std::vector<std::vector<double>> C(size, std::vector<double>(size, 0.0));
+
+        // Inicializar matrices A y B con valores aleatorios
+        for (int i = 0; i < size; i++) {
+            for (int j = 0; j < size; j++) {
+                A[i][j] = dis(gen);
+                B[i][j] = dis(gen);
+            }
+        }
+
+        // Medir el tiempo de ejecución de la multiplicación de matrices
+        auto start = std::chrono::high_resolution_clock::now();
+        matrixMultiplication(A, B, C, size);
+        auto end = std::chrono::high_resolution_clock::now();
+        std::chrono::duration<double> duration = end - start;
+
+        std::cout << "Tamaño de matriz: " << size << "x" << size
+                  << " - Tiempo de ejecución: " << duration.count() << " segundos" << std::endl;
+    }
+
+    return 0;
+}
+
+/*
+En este programa:
+
+Se genera matrices aleatorias A y B del tamaño especificado.
+Se multiplica las matrices utilizando la función matrixMultiplication con tres bucles anidados.
+Se mide el tiempo de ejecución de la multiplicación de matrices.
+Se imprime el tamaño de la matriz y el tiempo de ejecución.
+Teniendo en cuenta que el rendimiento de esta implementación puede variar según el hardware y el compilador utilizados,
+es importante considerar que la multiplicación de matrices tiene una complejidad O(n^3), 
+por lo que el tiempo de ejecución aumentará rápidamente a medida que el tamaño de la matriz aumenta.
+el resultado debería ser algo parecido a 
+Tamaño de matriz: 100x100 - Tiempo de ejecución: 0.0116527 segundos
+Tamaño de matriz: 200x200 - Tiempo de ejecución: 0.093183 segundos
+Tamaño de matriz: 300x300 - Tiempo de ejecución: 0.304741 segundos
+Tamaño de matriz: 400x400 - Tiempo de ejecución: 0.891982 segundos
+Tamaño de matriz: 500x500 - Tiempo de ejecución: 1.63401 segundos
+Tamaño de matriz: 600x600 - Tiempo de ejecución: 3.18039 segundos
+Tamaño de matriz: 700x700 - Tiempo de ejecución: 6.971 segundos
+Tamaño de matriz: 800x800 - Tiempo de ejecución: 11.169 segundos
+Tamaño de matriz: 900x900 - Tiempo de ejecución: 15.8121 segundos
+Tamaño de matriz: 1000x1000 - Tiempo de ejecución: 28.8976 segundos
+
+Se puede ejecutar directamente en 
+https://onlinegdb.com/lR4jFNilW
+*/
