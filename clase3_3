@@ -1,0 +1,92 @@
+/*
+Implementar la version por bloques (investigar en internet), seis bloques anidados, evaluar su desempeño y compararlo con la multiplicación de matrices clásica.
+*/
+/*
+Implementar la multiplicación de matrices por bloques (también conocida como multiplicación de matrices con optimización de caché) implica dividir las matrices 
+en bloques más pequeños y realizar las multiplicaciones de matrices en estos bloques. La idea es dividir las matrices A y B en sub-matrices más pequeñas
+que quepan en la caché L1 con el fin de realizar la multiplicación con un número menor de fallos de caché. (http://sedici.unlp.edu.ar/bitstream/handle/10915/50188/Documento_completo.pdf-PDFA.pdf?sequence=1&isAllowed=y)
+*/
+
+#include <iostream>
+#include <chrono>
+#include <vector>
+#include <random>
+
+const int MAX_SIZE = 1000;  // Tamaño máximo de la matriz
+const int BLOCK_SIZE = 32;   // Tamaño del bloque
+
+// Función para multiplicar matrices por bloques
+void blockMatrixMultiplication(const std::vector<std::vector<double>>& A,
+                                const std::vector<std::vector<double>>& B,
+                                std::vector<std::vector<double>>& C,
+                                int size) {
+    for (int i = 0; i < size; i += BLOCK_SIZE) {
+        for (int j = 0; j < size; j += BLOCK_SIZE) {
+            for (int k = 0; k < size; k += BLOCK_SIZE) {
+                for (int ii = i; ii < std::min(i + BLOCK_SIZE, size); ii++) {
+                    for (int jj = j; jj < std::min(j + BLOCK_SIZE, size); jj++) {
+                        for (int kk = k; kk < std::min(k + BLOCK_SIZE, size); kk++) {
+                            C[ii][jj] += A[ii][kk] * B[kk][jj];
+                        }
+                    }
+                }
+            }
+        }
+    }
+}
+
+int main() {
+    std::random_device rd;
+    std::mt19937 gen(rd());
+    std::uniform_real_distribution<double> dis(1.0, 10.0);
+
+    for (int size = 100; size <= MAX_SIZE; size += 100) {
+        // Crear matrices A, B y C de tamaño size x size
+        std::vector<std::vector<double>> A(size, std::vector<double>(size));
+        std::vector<std::vector<double>> B(size, std::vector<double>(size));
+        std::vector<std::vector<double>> C(size, std::vector<double>(size, 0.0));
+
+        // Inicializar matrices A y B con valores aleatorios
+        for (int i = 0; i < size; i++) {
+            for (int j = 0; j < size; j++) {
+                A[i][j] = dis(gen);
+                B[i][j] = dis(gen);
+            }
+        }
+
+        // Medir el tiempo de ejecución de la multiplicación de matrices por bloques
+        auto start = std::chrono::high_resolution_clock::now();
+        blockMatrixMultiplication(A, B, C, size);
+        auto end = std::chrono::high_resolution_clock::now();
+        std::chrono::duration<double> duration = end - start;
+
+        std::cout << "Tamaño de matriz: " << size << "x" << size
+                  << " - Tiempo de ejecución (por bloques): " << duration.count() << " segundos" << std::endl;
+    }
+
+    return 0;
+}
+
+/*
+En este programa, la multiplicación de matrices se realiza utilizando bloques de tamaño BLOCK_SIZE. 
+Los seis bucles anidados aseguran que se recorran los bloques y elementos correspondientes. 
+Luego, se mide el tiempo de ejecución de la multiplicación de matrices por bloques para diferentes tamaños de matriz.
+
+Para comparar el rendimiento con la multiplicación de matrices clásica, se puede ejecutar ambas implementaciones y 
+observar cómo varían los tiempos de ejecución para diferentes tamaños de matriz. 
+La multiplicación de matrices por bloques generalmente tiene un mejor rendimiento en términos de acceso a la memoria caché, 
+ya que reduce la cantidad de fallos de caché y mejora la localidad de los datos accedidos.
+Debemos tener por salida algo parecido a esto:
+Tamaño de matriz: 100x100 - Tiempo de ejecución (por bloques): 0.0239574 segundos
+Tamaño de matriz: 200x200 - Tiempo de ejecución (por bloques): 0.150696 segundos
+Tamaño de matriz: 300x300 - Tiempo de ejecución (por bloques): 0.394162 segundos
+Tamaño de matriz: 400x400 - Tiempo de ejecución (por bloques): 0.864665 segundos
+Tamaño de matriz: 500x500 - Tiempo de ejecución (por bloques): 1.60871 segundos
+Tamaño de matriz: 600x600 - Tiempo de ejecución (por bloques): 2.80674 segundos
+Tamaño de matriz: 700x700 - Tiempo de ejecución (por bloques): 4.44678 segundos
+Tamaño de matriz: 800x800 - Tiempo de ejecución (por bloques): 6.60067 segundos
+Tamaño de matriz: 900x900 - Tiempo de ejecución (por bloques): 9.52788 segundos
+Tamaño de matriz: 1000x1000 - Tiempo de ejecución (por bloques): 12.9872 segundos
+Versión online de ejecución
+https://onlinegdb.com/VH6s18O8E 
+*/
